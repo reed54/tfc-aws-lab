@@ -36,7 +36,7 @@ resource "aws_security_group" "awsfw" {
 
 resource "aws_key_pair" "ssh" {
   key_name = "awspublickey"
-  public_key = file("~/.ssh.id_rsa.pub") ##please use your public key 
+  public_key = file("~/.ssh/id_rsa.pub") ##please use your public key 
   tags = {
     env = "prod"
   }
