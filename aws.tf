@@ -45,7 +45,7 @@ resource "aws_key_pair" "ssh" {
 resource "aws_autoscaling_group" "tfasg" {
   name = "tf-asg"
   max_size = 4
-  min_size = 2
+  min_size = 1
   launch_configuration = aws_launch_configuration.awslaunch.name
   vpc_zone_identifier = [aws_subnet.web1.id,aws_subnet.web2.id]
   target_group_arns = [aws_lb_target_group.pool.arn]
