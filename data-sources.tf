@@ -35,7 +35,6 @@ data "aws_ami_ids" "ids" {
   }
 
 
- /*
   filter {
     name = "name"
     values = ["amzn2-ami-hvm-2.0*"]
@@ -50,5 +49,5 @@ data "aws_ami_ids" "ids" {
     name = "virtualization-type"
     values = ["hvm"]
   }
-  */
+  
 }
