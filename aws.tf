@@ -34,6 +34,7 @@ resource "aws_security_group" "awsfw" {
   }
 }
 
+/*
 resource "aws_key_pair" "ssh" {
   key_name = "awspublickey"
   public_key = file("~/.ssh/id_rsa.pub") ##please use your public key 
@@ -41,7 +42,7 @@ resource "aws_key_pair" "ssh" {
     env = "prod"
   }
 }
-
+*/
 resource "aws_autoscaling_group" "tfasg" {
   name = "tf-asg"
   max_size = 4
