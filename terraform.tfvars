@@ -7,7 +7,7 @@ echo '<!doctype html><html><head><title>CONGRATULATIONS!!..You are on your way t
 echo "<BR><BR>Terraform autoscaled app multi-cloud lab<BR><BR>" >> /var/www/html/index.html
 EOF
 
-az = "us-east-2b"
+az     = "us-east-2b"
 region = "us-east-2"
 
 

@@ -1,16 +1,16 @@
 resource "aws_launch_configuration" "awslaunch" {
-  name = var.aws_launchcfg_name
-  image_id = data.aws_ami.amazonlinux.image_id
-  instance_type = "t2.micro"
-  security_groups = [aws_security_group.awsfw.id]
+  name                        = var.aws_launchcfg_name
+  image_id                    = data.aws_ami.amazonlinux.image_id
+  instance_type               = "t2.micro"
+  security_groups             = [aws_security_group.awsfw.id]
   associate_public_ip_address = var.aws_publicip
   #key_name = aws_key_pair.ssh.key_name
   user_data = var.user_data
- 
+
 }
 
 resource "aws_security_group" "awsfw" {
-  name = "aws-fw"
+  name   = "aws-fw"
   vpc_id = aws_vpc.tfvpc.id
 
   dynamic "ingress" {
@@ -18,18 +18,18 @@ resource "aws_security_group" "awsfw" {
 
     content {
       description = ingress.value.description
-      protocol = "tcp"
-      to_port = ingress.value.port
-      from_port = ingress.value.port
+      protocol    = "tcp"
+      to_port     = ingress.value.port
+      from_port   = ingress.value.port
       cidr_blocks = ["0.0.0.0/0"]
     }
   }
 
   egress {
     description = "allow_all"
-    from_port = 0
-    protocol = "-1"
-    to_port = 0
+    from_port   = 0
+    protocol    = "-1"
+    to_port     = 0
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
@@ -44,43 +44,43 @@ resource "aws_key_pair" "ssh" {
 }
 */
 resource "aws_autoscaling_group" "tfasg" {
-  name = "tf-asg"
-  max_size = 4
-  min_size = 1
+  name                 = "tf-asg"
+  max_size             = 4
+  min_size             = 1
   launch_configuration = aws_launch_configuration.awslaunch.name
-  vpc_zone_identifier = [aws_subnet.web1.id,aws_subnet.web2.id]
-  target_group_arns = [aws_lb_target_group.pool.arn]
+  vpc_zone_identifier  = [aws_subnet.web1.id, aws_subnet.web2.id]
+  target_group_arns    = [aws_lb_target_group.pool.arn]
 
   tag {
-    key = "Name"
+    key                 = "Name"
     propagate_at_launch = true
-    value = "tf-ec2VM"
+    value               = "tf-ec2VM"
   }
 }
 
 //Network Loadbalancer configuration
 resource "aws_lb" "nlb" {
-  name = "tf-nlb"
-  load_balancer_type = "network"
+  name                             = "tf-nlb"
+  load_balancer_type               = "network"
   enable_cross_zone_load_balancing = true
-  subnets = [aws_subnet.web1.id,aws_subnet.web2.id]
+  subnets                          = [aws_subnet.web1.id, aws_subnet.web2.id]
 }
 
 resource "aws_lb_listener" "frontend" {
   load_balancer_arn = aws_lb.nlb.arn
-  port = 80
-  protocol = "TCP"
+  port              = 80
+  protocol          = "TCP"
   default_action {
-    type = "forward"
+    type             = "forward"
     target_group_arn = aws_lb_target_group.pool.arn
   }
 }
 
 resource "aws_lb_target_group" "pool" {
-  name = "web"
-  port = 80
+  name     = "web"
+  port     = 80
   protocol = "TCP"
-  vpc_id = aws_vpc.tfvpc.id
+  vpc_id   = aws_vpc.tfvpc.id
 }
 
 //network config
@@ -90,9 +90,9 @@ resource "aws_vpc" "tfvpc" {
 }
 
 resource "aws_subnet" "web1" {
-      cidr_block = "172.20.10.0/24"
-  vpc_id = aws_vpc.tfvpc.id
-  availability_zone = element(data.aws_availability_zones.azs.names,0)
+  cidr_block        = "172.20.10.0/24"
+  vpc_id            = aws_vpc.tfvpc.id
+  availability_zone = element(data.aws_availability_zones.azs.names, 0)
 
   tags = {
     name = "web1"
@@ -101,9 +101,9 @@ resource "aws_subnet" "web1" {
 }
 
 resource "aws_subnet" "web2" {
-  cidr_block = "172.20.20.0/24"
-  vpc_id = aws_vpc.tfvpc.id
-  availability_zone = element(data.aws_availability_zones.azs.names,1)
+  cidr_block        = "172.20.20.0/24"
+  vpc_id            = aws_vpc.tfvpc.id
+  availability_zone = element(data.aws_availability_zones.azs.names, 1)
 
   tags = {
     name = "web1"
@@ -119,8 +119,8 @@ resource "aws_internet_gateway" "igw" {
 }
 
 resource "aws_route" "tfroute" {
-  route_table_id = aws_vpc.tfvpc.main_route_table_id
+  route_table_id         = aws_vpc.tfvpc.main_route_table_id
   destination_cidr_block = "0.0.0.0/0"
-  gateway_id = aws_internet_gateway.igw.id
+  gateway_id             = aws_internet_gateway.igw.id
 }
 

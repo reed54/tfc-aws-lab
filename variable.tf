@@ -1,5 +1,5 @@
 variable "users" {
-  default = ["am9obg==","YXJ1bg=="]
+  default = ["am9obg==", "YXJ1bg=="]
 }
 
 variable "region" {
@@ -7,21 +7,21 @@ variable "region" {
 }
 
 variable "az" {
-  default = ["us-east-2b","us-east-2c","us-east-2d"]
+  default = ["us-east-2b", "us-east-2c", "us-east-2d"]
 }
 variable "aws_launchcfg_name" {
   description = "aws launch config for ec2 ASG"
-  default = "aws_launch"
-  type = string
+  default     = "aws_launch"
+  type        = string
 }
 
 variable "aws_image" {
   description = "amazon linux image id for region Ohio"
-  type = string
-  default = "ami-07c8bc5c1ce9598c3"
+  type        = string
+  default     = "ami-07c8bc5c1ce9598c3"
 }
 
-variable "ec2cost"{
+variable "ec2cost" {
   default = "free_tier"
 }
 
@@ -30,18 +30,18 @@ variable "instance_type" {
   default = [
     "T2.MICRO",
     "T2.LARGE",
-    "T2.MEDIUM"]
+  "T2.MEDIUM"]
 }
 
 variable "aws_publicip" {
   description = "public ip assignement for ec2"
-  default = true
-  type = bool
+  default     = true
+  type        = bool
 }
 
 variable "user_data" {
   description = "user data for apache script"
-  default = <<-EOF
+  default     = <<-EOF
 #!/bin/bash
 sudo yum -y update
 sudo yum install -y httpd
@@ -58,44 +58,44 @@ variable "vpc-block" {
 
 data "aws_ami" "amazonlinux" {
   most_recent = true
-  owners = ["amazon"]
+  owners      = ["amazon"]
 
   filter {
-    name = "name"
+    name   = "name"
     values = ["amzn2-ami-hvm-2.0*"]
   }
 
   filter {
-    name = "architecture"
+    name   = "architecture"
     values = ["x86*"]
   }
 }
-variable "linuxtype"{
+variable "linuxtype" {
   default = "ubuntu"
 
 }
 variable "ami" {
-  default = ["ami-ubuntu","ami-centos","ami-amzlinux","ami-ubuntu","ami-centos"]
+  default = ["ami-ubuntu", "ami-centos", "ami-amzlinux", "ami-ubuntu", "ami-centos"]
 }
 
 variable "gcp-machinetype" {
-  default = ["n1-standard-1","n1-standard-1"]
+  default = ["n1-standard-1", "n1-standard-1"]
 }
 
-variable "gcp-tier"{
+variable "gcp-tier" {
   default = "free-tier"
 }
 
-variable "gcp-image"{
-  default = ["debian-cloud/debian-9","centos-cloud/centos-8"]
+variable "gcp-image" {
+  default = ["debian-cloud/debian-9", "centos-cloud/centos-8"]
 }
 
-variable "debian-script"{
+variable "debian-script" {
   default = "sudo apt-get install -y apache2 && sudo service apache2 start && echo '<!doctype html><html><body><h1>CONGRATULATIONS!!..You are on your way to become a Terraform expert!</h1></body></html>' | sudo tee /var/www/html/index.html"
 
 }
 
-variable "centos-script"{
+variable "centos-script" {
   default = "sudo yum -y update && sudo yum install -y httpd && sudo service httpd start && echo '<!doctype html><html><body><h1>CONGRATULATIONS!!..You are on your way to become a Terraform expert!</h1></body></html>' | sudo tee /var/www/html/index.html"
 }
 
